@@ -16,24 +16,14 @@
 </template>
 
 <script>
-// eslint-disable-next-line
-import { db } from '@/plugins/firebase'
-
 export default {
-  props: ['ip'],
   data: () => ({
     disabled: null
   }),
   methods: {
     async createRoom() {
       this.disabled = true
-
-      db.collection('rooms').add({
-        owner: this.ip,
-        title: Math.floor(Math.random() * 99999999 + 10000000).toString(),
-        messages: []
-      })
-
+      await this.$store.dispatch('createRoom')
       this.disabled = false
     }
   }

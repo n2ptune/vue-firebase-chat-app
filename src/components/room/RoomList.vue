@@ -1,8 +1,8 @@
 <template>
   <router-link :to="`/room/${meta.id}`">
-    <article class="w-full px-4 py-12 hover:bg-gray-300">
+    <article class="px-4 w-full py-6 hover:bg-gray-300">
       <div class="text-left">
-        <span class="text-xl">{{ meta.owner }}</span
+        <span class="text-xl">{{ meta.owner.nickname }}</span
         >님의 {{ meta.title }}번 방
       </div>
     </article>
@@ -15,13 +15,4 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
-article::before {
-  content: '';
-  display: block;
-  margin: 1rem 0;
-  width: 100%;
-  height: 2px;
-  background-color: rgba(0, 0, 0, 0.11);
-}
-</style>
+<style lang="postcss" scoped></style>

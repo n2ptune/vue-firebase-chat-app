@@ -1,8 +1,8 @@
 <template>
   <header
-    class="flex relative items-center bg-orange-800 w-full h-16 px-4 py-6"
+    class="flex relative items-center w-full h-16 px-4 py-6 border-gray-300 border"
   >
-    <div class="text-white text-xl">
+    <div class="text-xl">
       {{ name }}
     </div>
   </header>

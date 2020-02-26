@@ -1,9 +1,9 @@
 <template>
-  <main class="px-4 py-2">
+  <main class="py-2">
     <section v-if="!isRoomEmpty">
       <room-list v-for="room in rooms" :key="room.title" :meta="room" />
     </section>
-    <room-create :ip="ip" v-else />
+    <room-create v-else />
   </main>
 </template>
 
@@ -16,14 +16,52 @@ import { db } from '@/plugins/firebase'
 export default {
   data: () => ({
     isRoomEmpty: null,
-    rooms: [],
-    ip: null
+    rooms: []
   }),
   components: {
     RoomList,
     RoomCreate
   },
   async created() {
+    /**
+     * @get Cloudflare 서비스로 아이피 가져옴
+     */
+    const { data } = await this.$axios.get(
+      'https://www.cloudflare.com/cdn-cgi/trace'
+    )
+
+    // 받은 문자열에서 아이피만 자르기
+    const ip = data
+      .split('ip=')[1]
+      .split('ts=')[0]
+      .trim()
+
+    db.collection('users')
+      .where('ipAddr', '==', ip)
+      .get()
+      .then(async qs => {
+        // 유저 객체 받아서 스토어에 커밋
+        const storeMutate = user => this.$store.commit('setUser', user)
+
+        if (qs.empty) {
+          // 최초 사용자
+          const { data: dummy } = await this.$axios.get(
+            'https://uinames.com/api/?region=australia'
+          )
+          const nickname = `${dummy.surname} ${dummy.name}`
+
+          db.collection('users')
+            .add({
+              ipAddr: ip,
+              nickname
+            })
+            .then(() => storeMutate({ ipAddr: ip, nickname }))
+        } else {
+          // 기존 사용자면 그대로 저장
+          qs.forEach(doc => storeMutate(doc.data()))
+        }
+      })
+
     db.collection('rooms').onSnapshot(qs => {
       if (qs.empty) {
         this.isRoomEmpty = true
@@ -41,21 +79,6 @@ export default {
         this.rooms = docs
       }
     })
-
-    /**
-     * @get ip from cloudflare tace
-     */
-    const { data } = await this.$axios.get(
-      'https://www.cloudflare.com/cdn-cgi/trace'
-    )
-
-    // eslint-disable-next-line
-    const ip = data
-      .split('ip=')[1]
-      .split('ts=')[0]
-      .trim()
-
-    this.ip = ip
   }
 }
 </script>
