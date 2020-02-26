@@ -1,10 +1,14 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
+import Vue from 'vue'
+import './plugins/axios'
+import App from './App.vue'
+import router from './router'
 
-Vue.config.productionTip = false;
+import '@/assets/styles/index.css'
+import '@/assets/styles/tailwind.css'
+
+Vue.config.productionTip = false
 
 new Vue({
   router,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app')
