@@ -2,12 +2,23 @@ import Vue from 'vue'
 import './plugins/axios'
 import App from './App.vue'
 import router from './router'
+import VModal from 'vue-js-modal'
 
 import '@/assets/styles/index.css'
 import '@/assets/styles/tailwind.css'
 import store from './store'
 
+// icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCrown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faCrown)
+
 Vue.config.productionTip = false
+
+Vue.component('fa', FontAwesomeIcon)
+Vue.use(VModal)
 
 new Vue({
   router,

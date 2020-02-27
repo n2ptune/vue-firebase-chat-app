@@ -10,7 +10,6 @@
 <script>
 import RoomList from '@/components/room/RoomList.vue'
 import RoomCreate from '@/components/room/RoomCreate.vue'
-// eslint-disable-next-line
 import { db } from '@/plugins/firebase'
 
 export default {
@@ -18,49 +17,14 @@ export default {
     isRoomEmpty: null,
     rooms: []
   }),
+
   components: {
     RoomList,
     RoomCreate
   },
+
   async created() {
-    /**
-     * @get Cloudflare 서비스로 아이피 가져옴
-     */
-    const { data } = await this.$axios.get(
-      'https://www.cloudflare.com/cdn-cgi/trace'
-    )
-
-    // 받은 문자열에서 아이피만 자르기
-    const ip = data
-      .split('ip=')[1]
-      .split('ts=')[0]
-      .trim()
-
-    db.collection('users')
-      .where('ipAddr', '==', ip)
-      .get()
-      .then(async qs => {
-        // 유저 객체 받아서 스토어에 커밋
-        const storeMutate = user => this.$store.commit('setUser', user)
-
-        if (qs.empty) {
-          // 최초 사용자
-          const { data: dummy } = await this.$axios.get(
-            'https://uinames.com/api/?region=australia'
-          )
-          const nickname = `${dummy.surname} ${dummy.name}`
-
-          db.collection('users')
-            .add({
-              ipAddr: ip,
-              nickname
-            })
-            .then(() => storeMutate({ ipAddr: ip, nickname }))
-        } else {
-          // 기존 사용자면 그대로 저장
-          qs.forEach(doc => storeMutate(doc.data()))
-        }
-      })
+    await this.$store.dispatch('connectUser')
 
     db.collection('rooms').onSnapshot(qs => {
       if (qs.empty) {
@@ -70,15 +34,30 @@ export default {
         const docs = []
 
         qs.forEach(doc => {
-          const { message, owner, title } = doc.data()
+          const { message, owner, title, createdAt } = doc.data()
           const { id } = doc
 
-          docs.push({ message, owner, title, id })
+          docs.push({ message, owner, title, id, createdAt })
         })
 
         this.rooms = docs
+        this.rooms.sort((a, b) => {
+          // Date 생성자는 밀리 세컨드 기준 파이어베이스에서 받은
+          // 타임스탬프의 초와 나노초를 밀리초로 변환
+          const toMillSeconds = (seconds, nano) =>
+            new Date(seconds * 1000 + nano / 1000000)
+
+          const [aD, bD] = [
+            toMillSeconds(a.createdAt.seconds, a.createdAt.nanoseconds),
+            toMillSeconds(b.createdAt.seconds, b.createdAt.nanoseconds)
+          ]
+
+          return aD - bD
+        })
       }
     })
   }
 }
 </script>
+
+<style lang="postcss"></style>
