@@ -1,9 +1,12 @@
 <template>
-  <main class="flex justify-end items-end p-2">
-    <!-- <div>
-      {{ messages }}
-    </div> -->
-    <!-- <Message /> -->
+  <main class="flex flex-col justify-end items-end p-2 overflow-y-auto">
+    <message-wrapper>
+      <message
+        v-for="(message, index) in messages"
+        :key="index"
+        :message="message"
+      />
+    </message-wrapper>
     <input
       v-model="myMessage"
       :disabled="isDisabled"
@@ -26,6 +29,12 @@ export default {
     isDisabled: false,
     id: null
   }),
+
+  components: {
+    MessageWrapper: () =>
+      import('@/components/room/message/MessageWrapper.vue'),
+    Message: () => import('@/components/room/message/Message.vue')
+  },
 
   async created() {
     await this.$store.dispatch('connectUser')
