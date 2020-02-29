@@ -3,6 +3,7 @@ import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import VModal from 'vue-js-modal'
+import VueChatScroll from 'vue-chat-scroll'
 
 import '@/assets/styles/index.css'
 import '@/assets/styles/tailwind.css'
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
 
 Vue.component('fa', FontAwesomeIcon)
 Vue.use(VModal)
+Vue.use(VueChatScroll)
 
 new Vue({
   router,

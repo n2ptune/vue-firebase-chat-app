@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col justify-end items-end p-2 overflow-y-auto">
-    <message-wrapper>
+    <message-wrapper v-chat-scroll="{ always: true }">
       <message
         v-for="(message, index) in messages"
         :key="index"
@@ -73,8 +73,30 @@ export default {
   },
 
   methods: {
-    sendMessage() {
+    async sendMessage(event) {
       if (!this.myMessage) return
+
+      // 메세지 보낼때까지 사용 불가
+      this.isDisabled = true
+
+      const room = db.collection('rooms').doc(this.id)
+
+      await room.update({
+        messages: firebase.firestore.FieldValue.arrayUnion({
+          type: 'MESSAGE',
+          content: this.myMessage,
+          date: new Date(),
+          owner: {
+            ipAddr: this.$store.getters.getUserIpAddr,
+            nickname: this.$store.getters.getUserNickname
+          }
+        })
+      })
+
+      this.myMessage = ''
+      this.isDisabled = false
+
+      this.$nextTick(() => event.target.focus())
     }
   },
 

@@ -9,7 +9,13 @@
         : 'self-start'
     "
   >
-    <component :is="matchMessage" :message="message" :date="dateToString" />
+    <component
+      class="message"
+      :class="matchMessage !== 'Notice' ? 'mx-2' : ''"
+      :is="matchMessage"
+      :message="message"
+      :date="dateToString"
+    />
   </div>
 </template>
 
@@ -56,3 +62,9 @@ export default {
   }
 }
 </script>
+
+<style lang="postcss" scoped>
+.message {
+  overflow-wrap: break-word;
+}
+</style>

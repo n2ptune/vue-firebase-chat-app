@@ -5,12 +5,20 @@
     <div class="text-xl mr-auto">
       {{ name }}
     </div>
-    <div class="ml-auto" v-if="$route.path === '/'">
+    <div class="ml-auto">
       <button
         @click="setModal"
         class="focus:outline-none px-4 py-2 hover:bg-gray-300 rounded-lg"
+        v-if="$route.path === '/'"
       >
         방 만들기
+      </button>
+      <button
+        v-else
+        @click="$router.push('/')"
+        class="focus:outline-none px-4 py-2 hover:bg-gray-300 rounded-lg"
+      >
+        나가기
       </button>
     </div>
     <modal name="create-room" :adaptive="true" :max-width="400" height="auto">
