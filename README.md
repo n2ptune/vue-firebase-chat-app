@@ -1,5 +1,7 @@
 # vue-firebase-chat-app
 
+Realtime chat app with Firebase, Vue
+
 ## Demo
 
 [https://vue-firebase-chat-app-ea08b.firebaseapp.com/](https://vue-firebase-chat-app-ea08b.firebaseapp.com/) hosting by firebase
