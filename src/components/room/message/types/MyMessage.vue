@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="my-message-wrap max-w-md px-4 py-2 rounded-lg">
+    <div class="my-message-wrap max-w-xs md:max-w-md px-4 py-2 rounded-lg">
       <div class="meta text-right text-sm text-white-600 mb-1">
         {{ message.owner.nickname }} · {{ dateToString }}
       </div>

@@ -4,6 +4,9 @@
       <room-list v-for="room in rooms" :key="room.title" :meta="room" />
     </section>
     <room-create v-else />
+    <section v-if="loading" class="flex items-center justify-center h-full">
+      <LoadingSpinner />
+    </section>
   </main>
 </template>
 
@@ -15,12 +18,14 @@ import { db } from '@/plugins/firebase'
 export default {
   data: () => ({
     isRoomEmpty: null,
-    rooms: []
+    rooms: [],
+    loading: true
   }),
 
   components: {
     RoomList,
-    RoomCreate
+    RoomCreate,
+    LoadingSpinner: () => import('@/components/LoadingSpinner.vue')
   },
 
   async created() {
@@ -55,6 +60,7 @@ export default {
           return aD - bD
         })
       }
+      this.loading = false
     })
   }
 }
