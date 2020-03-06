@@ -11,10 +11,10 @@ import store from './store'
 
 // icons
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCrown } from '@fortawesome/free-solid-svg-icons'
+import { faUserTie } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faCrown)
+library.add(faUserTie)
 
 Vue.config.productionTip = false
 

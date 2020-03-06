@@ -1,15 +1,22 @@
 <template>
   <router-link :to="`/room/${meta.id}`">
     <transition name="lift" appear>
-      <article class="px-4 w-full py-6 hover:bg-gray-300">
-        <div class="text-xl font-bold">
-          <span class="text-left">
-            {{ meta.title }}
-          </span>
+      <article class="flex flex-row px-4 w-full py-6 hover:bg-gray-300">
+        <div class="self-start">
+          <div class="text-xl font-bold">
+            <span class="text-left">
+              {{ meta.title }}
+            </span>
+          </div>
+          <div class="text-gray-500">
+            <fa :icon="['fas', 'user-tie']" class="text-gray-600" />
+            {{ meta.owner.nickname }} · {{ meta.users.length }}명 접속중
+          </div>
         </div>
-        <div class="text-gray-500">
-          <fa :icon="['fas', 'crown']" class="text-gray-600" />
-          {{ meta.owner.nickname }}님의 방
+        <div class="ml-auto mr-4 self-center">
+          <div class="px-4 py-2 rounded-lg bg-yellow-300 font-bold">
+            {{ meta.messages }}
+          </div>
         </div>
       </article>
     </transition>

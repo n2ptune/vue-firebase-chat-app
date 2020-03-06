@@ -39,10 +39,17 @@ export default {
         const docs = []
 
         qs.forEach(doc => {
-          const { message, owner, title, createdAt } = doc.data()
+          const { messages, owner, title, createdAt, users } = doc.data()
           const { id } = doc
 
-          docs.push({ message, owner, title, id, createdAt })
+          docs.push({
+            messages: messages.length > 999 ? '999+' : messages.length,
+            owner,
+            title,
+            id,
+            createdAt,
+            users
+          })
         })
 
         this.rooms = docs
@@ -65,5 +72,3 @@ export default {
   }
 }
 </script>
-
-<style lang="postcss"></style>
